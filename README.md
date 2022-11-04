@@ -1,6 +1,6 @@
 ## Clinic Management System
 
-Welcome to the Clinic Management Syste. Here is a guideline to help you get started to run the code.
+Welcome to the Clinic Management System. Here is a guideline to help you get started to run the code.
 
 > Requirements:
 - `JRE / JDK`
