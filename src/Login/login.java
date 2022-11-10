@@ -33,12 +33,12 @@ public class login {
                     break;
                 }
 
-                else  {
+                else {
                     System.out.println("Invalid command");
                     continue;
                 }
-            }   while (true);
-        }   
+            } while (true);
+        }
     }
 
     public void loginAccount() {
@@ -54,21 +54,21 @@ public class login {
             System.out.println("\nEnter Password: ");
             String password = input.nextLine();
 
-            user user = new user(username,password);
+            user user = new user(username, password);
 
             verifyAccount(user);
         }
     }
 
     public void verifyAccount(user account) {
-        String user,pass;
+        String user, pass;
         boolean loggedin = false;
 
         try {
             Scanner input = new Scanner(new File("users.txt"));
-            input.nextLine();   // skip first empty line of file
+            input.nextLine(); // skip first empty line of file
             while (input.hasNextLine() && !loggedin) {
-                String s = input.nextLine();  
+                String s = input.nextLine();
                 user = s.split(":")[0];
                 pass = s.split(":")[1];
 
@@ -76,7 +76,7 @@ public class login {
                     System.out.println("Login success");
                     loggedin = true;
                     break;
-              }
+                }
             }
             if (!loggedin) {
                 System.out.println("Invalid login, returning..\n");
@@ -87,7 +87,7 @@ public class login {
         } catch (FileNotFoundException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-        }  
+        }
     }
-    
+
 }

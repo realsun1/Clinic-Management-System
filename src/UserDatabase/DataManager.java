@@ -1,10 +1,10 @@
-package Userdatabse;
+package UserDatabase;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class manager {
+public class DataManager {
     static private Connection con;
     static private Statement stat;
     static private String driver = "com.mysql.cj.jdbc.Driver";
@@ -13,7 +13,7 @@ public class manager {
     static private String pwd = "123456";
 
     // creator for manager, connect to the database
-    public manager() throws ClassNotFoundException, SQLException {
+    public DataManager() throws ClassNotFoundException, SQLException {
         Class.forName(driver);
         con = DriverManager.getConnection(url, user, pwd);
         stat = con.createStatement();
