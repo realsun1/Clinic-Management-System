@@ -20,6 +20,7 @@ services:
       # Where our data will be persisted
     volumes:
       - my-db:/var/lib/mysql
+      - ./initdb:/docker-entrypoint-initdb.d
 # Names our volume
 volumes:
   my-db:
