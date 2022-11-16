@@ -72,9 +72,6 @@ public class login {
                 user = rs.getString(3);
                 pass = rs.getString(4);
 
-                System.out.println(user);
-                System.out.println(pass);
-
                 if (user.equals(username) && pass.equals(password)) {
                     System.out.println("Login Success.\n");
                 }
