@@ -4,6 +4,7 @@ import UserDatabase.DataManager;
 
 import java.sql.SQLException;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -102,6 +103,10 @@ public class Receptionist {
         }
         System.out.println("Please Choose the Date(YYYY/MM/DD HH:mm):");
         String date = in.nextLine();
+        while (!timeCheck(list2, date)) {
+            System.out.println("Conflict Exist! Please Enter another time:");
+            date = in.nextLine();
+        }
         String sql3 = "select pcontact"
                 + " from patient"
                 + " where pname=\"" + pname + "\";";
@@ -121,6 +126,19 @@ public class Receptionist {
             System.err.println("Error: (" + e.getMessage() + ").");
         }
         System.out.println("Add Successfully");
+    }
+
+    // Check if the patient's perferring time is available
+    private boolean timeCheck(List<String> timeList, String selectedTime) throws ParseException {
+        SimpleDateFormat sdf = new SimpleDateFormat("YYYY/MM/DD HH:mm");
+        Long select = sdf.parse(selectedTime).getTime();
+        for (String time : timeList) {
+            Long busy = sdf.parse(time).getTime();
+            Long gap = Math.abs(select - busy) / 60000;
+            if (gap < 30)
+                return false;
+        }
+        return true;
     }
 
     public void deleteAppointment(Scanner in, DataManager manager) throws SQLException {

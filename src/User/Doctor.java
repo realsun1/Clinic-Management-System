@@ -58,4 +58,11 @@ public class Doctor {
         report.updateDiagnosis(rid, newDiagnosis, manager);
     }
 
+    public static void main(String[] args) throws ClassNotFoundException, SQLException {
+        DataManager manager = new DataManager();
+        Doctor doctor = new Doctor(156438485, "Jack");
+        // doctor.getAppointments(manager);
+        // doctor.showAppointments();
+    }
+
 }

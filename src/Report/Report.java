@@ -1,6 +1,7 @@
 package Report;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import UserDatabase.DataManager;
@@ -63,11 +64,29 @@ public class Report {
         System.out.println("Report ID:" + rid + "\n"
                 + "Patient's Name:" + patientName + "\n"
                 + "Doctor's Name:" + doctorName + "\n"
-                + "Diagnosis:" + diagnosis + "\n");
+                + "Diagnosis:" + diagnosis);
         System.out.print("Medicine:");
         for (String med : medicine) {
             System.out.print(med + " ");
         }
         System.out.println();
     }
+
+    // public static void main(String[] args) throws ClassNotFoundException,
+    // SQLException {
+    // DataManager manager = new DataManager();
+    // int rid = 16854381;
+    // String doctorName = "Jack";
+    // String patientName = "Andy";
+    // String diagnosis = "sfvoniuvrsnfirtbvjknsolcoricfn";
+    // List<String> medicine = new ArrayList<>();
+    // medicine.add("aaa");
+    // medicine.add("bbb");
+    // medicine.add("ccc");
+    // Report report = new Report(rid, doctorName, diagnosis, medicine, patientName,
+    // manager);
+    // report.printReport();
+    // Report report = new Report();
+    // report.updateDiagnosis(rid, "seabhlruaegorig", manager);
+    // }
 }
