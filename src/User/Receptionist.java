@@ -75,6 +75,19 @@ public class Receptionist {
     public void makeAppointment(Scanner in, DataManager manager) throws SQLException, ParseException {
         System.out.println("Please Enter the Patient's Name: ");
         String pname = in.nextLine();
+        String sql3 = "select pcontact"
+                + " from patient"
+                + " where pname=\"" + pname + "\";";
+        String pcontact = "";
+        try {
+            pcontact = manager.query(sql3).get(0);
+        } catch (SQLException e) {
+            System.err.println("Error: (" + e.getMessage() + ").");
+        }
+        if (pcontact == "") {
+            System.out.println("Patient's Information doesn't exit. Please Create Patient Record First.");
+            return;
+        }
         String sql1 = "select *"
                 + " from doctor;";
         List<String> list1 = new ArrayList<>();
@@ -106,15 +119,6 @@ public class Receptionist {
         while (!timeCheck(list2, date)) {
             System.out.println("Conflict Exist! Please Enter another time:");
             date = in.nextLine();
-        }
-        String sql3 = "select pcontact"
-                + " from patient"
-                + " where pname=\"" + pname + "\";";
-        String pcontact = "";
-        try {
-            pcontact = manager.query(sql3).get(0);
-        } catch (SQLException e) {
-            System.err.println("Error: (" + e.getMessage() + ").");
         }
         String sql4 = "insert into appointment(dname, dno, pname, pcontact, date, cost, location)"
                 + "values(\"" + d_info.get(selected)[1] + "\"," + d_info.get(selected)[0] + ",\"" + pname + "\",\""
