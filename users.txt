@@ -1,5 +1,0 @@
-
-user:pass
-test1:test1
-abc:abc
-a:a
