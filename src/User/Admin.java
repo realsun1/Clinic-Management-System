@@ -90,7 +90,7 @@ public class Admin {
         info = validator.userValidator(info, in, manager);
         String sql = "insert into login_info(username,password,name,id,type)"
                 + " values(\"" + info.get(0) + "\",\"" + info.get(1) + "\",\"" + info.get(2)
-                + "\",\"" + Integer.parseInt(info.get(3)) + ",\"" + info.get(4) + "\");";
+                + "\"," + Integer.parseInt(info.get(3)) + ",\"" + info.get(4) + "\");";
         manager.execute(sql);
         System.out.println("Add Successfully.");
     }
@@ -108,4 +108,17 @@ public class Admin {
         System.out.println("Delete Successfully.");
     }
 
+    // public static void main(String[] args) throws ClassNotFoundException,
+    // SQLException {
+    // Admin admin = new Admin(000000, "sfdegvsd");
+    // DataManager manager = new DataManager();
+    // Scanner in = new Scanner(System.in);
+    // admin.getDoctors(manager);
+    // admin.printDoctors();
+    // admin.getPatients(manager);
+    // admin.printPatients();
+    // admin.getReceptionists(manager);
+    // admin.printReceptionists();
+    // admin.addUser(manager, in);
+    // }
 }

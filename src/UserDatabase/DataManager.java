@@ -66,14 +66,14 @@ public class DataManager {
     }
 
     public static void main(String[] args) throws ClassNotFoundException,
-    SQLException {
-    //     DataManager mg = new DataManager();
-    //     /*String add = "insert into doctor(dname, dno, location)"
-    //     + "values(\"erc\",\"strb1\",\"dstn\");";
-    //     mg.execute(add);*/
-    //     String query = "select * from login_info";
-    //     List<String> display = mg.query(query);
-    //     System.out.println(display.get(0));
-    //    // System.out.println(display.get(1));
+            SQLException {
+        // DataManager mg = new DataManager();
+        // /*String add = "insert into doctor(dname, dno, location)"
+        // + "values(\"erc\",\"strb1\",\"dstn\");";
+        // mg.execute(add);*/
+        // String query = "select * from login_info";
+        // List<String> display = mg.query(query);
+        // System.out.println(display.get(0));
+        // // System.out.println(display.get(1));
     }
 }
