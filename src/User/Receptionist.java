@@ -27,14 +27,14 @@ public class Receptionist {
         System.out.println("Please Enter the Patient's Symptom:");
         String symptom = in.nextLine();
         String sql = "insert into patient(pname, pcontact, symptom)"
-                + " values(\"" + name + "\",\"" + contact + "\",\"" + symptom + "\");";
+                + "values(" + name + "," + contact + "," + symptom + ");";
         try {
-            manager.execute(sql);
+            if (manager.execute(sql))
+                System.out.println("Add Successfully");
         } catch (SQLException e) {
             System.err.println("Error: (" + e.getMessage() + ").");
             return;
         }
-        System.out.println("Add Successfully");
     }
 
     // search a patient by name and return patient's information.
@@ -42,8 +42,8 @@ public class Receptionist {
         System.out.println("Please Enter the Patient You Want to Search:");
         String name = in.nextLine();
         String sql = "select *"
-                + " from patient"
-                + " where pname=\"" + name + "\";";
+                + "from patient"
+                + "where pname = " + name + ";";
         List<String> list = new ArrayList<>();
         try {
             list = manager.query(sql);
@@ -59,14 +59,14 @@ public class Receptionist {
         System.out.println("Please Enter the Name You Want to Delete");
         String name = in.nextLine();
         String sql = "delete from patient"
-                + " where pname=\"" + name + "\";";
+                + "where pname = " + name + ";";
         try {
-            manager.execute(sql);
+            if (manager.execute(sql))
+                System.out.println("Delete Successfully");
         } catch (SQLException e) {
             System.err.println("Error: (" + e.getMessage() + ").");
             return;
         }
-        System.out.println("Delete Successfully");
     }
 
     // create a new appointment
@@ -75,21 +75,8 @@ public class Receptionist {
     public void makeAppointment(Scanner in, DataManager manager) throws SQLException, ParseException {
         System.out.println("Please Enter the Patient's Name: ");
         String pname = in.nextLine();
-        String sql3 = "select pcontact"
-                + " from patient"
-                + " where pname=\"" + pname + "\";";
-        String pcontact = "";
-        try {
-            pcontact = manager.query(sql3).get(0);
-        } catch (SQLException e) {
-            System.err.println("Error: (" + e.getMessage() + ").");
-        }
-        if (pcontact == "") {
-            System.out.println("Patient's Information doesn't exit. Please Create Patient Record First.");
-            return;
-        }
         String sql1 = "select *"
-                + " from doctor;";
+                + "from doctor;";
         List<String> list1 = new ArrayList<>();
         try {
             list1 = manager.query(sql1);
@@ -98,7 +85,7 @@ public class Receptionist {
         }
         List<String[]> d_info = new ArrayList<>();
         for (String info : list1) {
-            d_info.add(info.split(", "));
+            d_info.add(info.split(","));
         }
         for (int i = 0; i < d_info.size(); ++i) {
             System.out.println((i + 1) + "." + d_info.get(i)[1]);
@@ -106,68 +93,51 @@ public class Receptionist {
         System.out.println("Please Choose the Doctor by No: ");
         int selected = Integer.parseInt(in.nextLine()) - 1;
         String sql2 = "select date"
-                + " from appointment"
-                + " where dname=\"" + d_info.get(selected)[1] + "\";";
+                + "from appointment"
+                + "where dname = " + d_info.get(selected)[1] + ";";
         List<String> list2 = new ArrayList<>();
-        list2 = manager.query(sql2);
-        System.out.println("The Following Times Have Been Booked: ");
-        for (String date : list2) {
-            System.out.println(date);
-        }
-        System.out.println("Please Choose the Date(YYYY/MM/DD HH:mm):");
-        String date = in.nextLine();
-        while (!timeCheck(list2, date)) {
-            System.out.println("Conflict Exist! Please Enter another time:");
-            date = in.nextLine();
-        }
-        String sql4 = "insert into appointment(dname, dno, pname, pcontact, date, cost, location)"
-                + "values(\"" + d_info.get(selected)[1] + "\"," + d_info.get(selected)[0] + ",\"" + pname + "\",\""
-                + pcontact
-                + "\",\"" + date + "\"," + "5" + ",\"" + d_info.get(selected)[2] + "\");";
         try {
-            manager.execute(sql4);
+            list2 = manager.query(sql2);
         } catch (SQLException e) {
             System.err.println("Error: (" + e.getMessage() + ").");
         }
-        System.out.println("Add Successfully");
-    }
-
-    // Check if the patient's perferring time is available
-    private boolean timeCheck(List<String> timeList, String selectedTime) throws ParseException {
-        SimpleDateFormat sdf = new SimpleDateFormat("YYYY/MM/DD HH:mm");
-        Long select = sdf.parse(selectedTime).getTime();
-        for (String time : timeList) {
-            Long busy = sdf.parse(time).getTime();
-            Long gap = Math.abs(select - busy) / 60000;
-            if (gap < 30)
-                return false;
+        System.out.println("The Following Times Have Been Booked: ");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        for (String date : list2) {
+            System.out.println(sdf.parse(date));
         }
-        return true;
+        System.out.println("Please Choose the Date(YYYY/MM/DD):");
+        String date = in.nextLine();
+        String sql3 = "select pcontact"
+                + "from patient"
+                + "where pname = " + pname + ";";
+        String pcontact = "";
+        try {
+            pcontact = manager.query(sql3).get(0);
+        } catch (SQLException e) {
+            System.err.println("Error: (" + e.getMessage() + ").");
+        }
+        String sql4 = "insert into appointment(dname, dno, pname, pcontact, date, cost, location)"
+                + "values(" + d_info.get(selected)[0] + "," + d_info.get(selected)[1] + "," + pname + "," + pcontact
+                + "," + date + "," + "5" + "," + d_info.get(selected)[2] + ");";
+        try {
+            if (manager.execute(sql4))
+                System.out.println("Add Successfully");
+        } catch (SQLException e) {
+            System.err.println("Error: (" + e.getMessage() + ").");
+        }
     }
 
     public void deleteAppointment(Scanner in, DataManager manager) throws SQLException {
         System.out.println("Please Enter the Patient's Name and Doctor's Name(Split by ,):");
         String[] info = in.nextLine().split(",");
         String sql = "delete from appointment"
-                + " where dname=\"" + info[1] + "\" and pname=\"" + info[0] + "\";";
+                + "where dname = " + info[1] + "and pname = " + info[0] + ";";
         try {
-            manager.execute(sql);
+            if (manager.execute(sql))
+                System.out.println("Delete Successfully");
         } catch (SQLException e) {
             System.err.println("Error: (" + e.getMessage() + ").");
         }
-        System.out.println("Delete Successfully");
     }
-
-    /*
-     * public static void main(String[] args) throws ClassNotFoundException,
-     * SQLException, ParseException {
-     * Receptionist receptionist = new Receptionist(0, 0);
-     * DataManager manager = new DataManager();
-     * Scanner in = new Scanner(System.in);
-     * // receptionist.makeAppointment(in, manager);
-     * // receptionist.deleteAppointment(in, manager);
-     * // receptionist.addPatient(in, manager);
-     * receptionist.deletePatient(in, manager);
-     * }
-     */
 }
