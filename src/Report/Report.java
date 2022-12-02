@@ -7,23 +7,35 @@ import UserDatabase.DataManager;
 
 public class Report {
     private int rid;
-    private String doctorName;
-    private String patientName;
+    private int doctorId;
+    private int patientId;
     private String diagnosis;
     private List<String> medicine;
+    private String doctorName;
+    private String patientName;
 
     // constructor
-    public Report(int rid, String doctorName, String diagnosis, List<String> medicine, String patientName,
+    public Report(int rid, int doctorId, String diagnosis, List<String> medicine, int patientId,
             DataManager manager) throws SQLException {
         this.rid = rid;
-        this.doctorName = doctorName;
+        this.doctorId = doctorId;
         this.diagnosis = diagnosis;
         this.medicine = medicine;
-        this.patientName = patientName;
+        this.patientId = patientId;
         addReport(manager);
-    }
 
-    public Report() {
+        String query1 = "select dname from doctor where dnumber=" + Integer.toString(doctorId);
+        String query2 = "select pname from patient where pnumber=" + Integer.toString(patientId);
+
+        try {
+            List<String> match1 = manager.query(query1);
+            List<String> match2 = manager.query(query2);
+
+            this.doctorName = match1.get(0);
+            this.patientName = match2.get(0);
+        } catch (SQLException e) {
+            System.err.println("Error: (" + e.getMessage() + ").");
+        }
     }
 
     // add the report to database
@@ -31,13 +43,13 @@ public class Report {
         String medicineList = "";
         for (String med : medicine)
             medicineList = medicineList + med + " ";
-        String sql = "insert into report(rid, dname, pname, diagnosis, medicine)"
-                + " values(" + rid + ",\"" + doctorName + "\",\"" + patientName + "\",\"" + diagnosis + "\",\""
+        String sql = "insert into report(rid, dnumber, pnumber, diagnosis, medicine)"
+                + " values(" + rid + ",\"" + doctorId + "\",\"" + patientId + "\",\"" + diagnosis + "\",\""
                 + medicineList + "\");";
         try {
             manager.execute(sql);
         } catch (SQLException e) {
-            System.err.println("Error: (" + e.getMessage() + ").");
+            e.printStackTrace();
             return;
         }
         System.out.println("Add Successfully");
@@ -70,22 +82,4 @@ public class Report {
         }
         System.out.println();
     }
-
-    // public static void main(String[] args) throws ClassNotFoundException,
-    // SQLException {
-    // DataManager manager = new DataManager();
-    // int rid = 16854381;
-    // String doctorName = "Jack";
-    // String patientName = "Andy";
-    // String diagnosis = "sfvoniuvrsnfirtbvjknsolcoricfn";
-    // List<String> medicine = new ArrayList<>();
-    // medicine.add("aaa");
-    // medicine.add("bbb");
-    // medicine.add("ccc");
-    // Report report = new Report(rid, doctorName, diagnosis, medicine, patientName,
-    // manager);
-    // report.printReport();
-    // Report report = new Report();
-    // report.updateDiagnosis(rid, "seabhlruaegorig", manager);
-    // }
 }

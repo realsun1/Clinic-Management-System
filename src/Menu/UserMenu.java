@@ -125,14 +125,36 @@ public class UserMenu {
 
     private static void doctorMenu(String asUser) {
         Doctor doctor = new Doctor(asUser, scanner, dataManager);
+        Receptionist receptionist = new Receptionist(scanner, dataManager);
+        String input = "";
 
-        System.out.println("+-----------------------Doctor Menu-----------------------+");
-        System.out.println("|                 1. View Patients                        |");
-        System.out.println("|                 2. Find Patient Report                  |");
-        System.out.println("|                 3. Create Patient Report                |");
-        System.out.println("|                 4. Return to Start                      |");
-        System.out.println("|                 5. Exit                                 |");
-        System.out.println("+---------------------------------------------------------+");
+        do {
+            System.out.println("+-----------------------Doctor Menu-----------------------+");
+            System.out.println("|                 1. View Patients                        |");
+            System.out.println("|                 2. Find Patient Record                  |");
+            System.out.println("|                 3. Create Patient Record                |");
+            System.out.println("|                 4. Return to Start                      |");
+            System.out.println("|                 5. Exit                                 |");
+            System.out.println("+---------------------------------------------------------+");
+
+            input = getValidInput();
+
+            switch (input) {
+                case "1":
+                    receptionist.printPatients();
+                    break;
+                case "2":
+                    doctor.printReports();
+                    break;
+                case "3":
+                    doctor.createReport();
+                    break;
+                case "5":
+                    exit();
+                    break;
+            }
+            System.out.println();
+        } while (!input.equals("4"));
     }
 
     private static void adminMenu() {
