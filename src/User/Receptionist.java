@@ -93,7 +93,7 @@ public class Receptionist {
     public void printAppointments() {
         getAppointments();
 
-        for (String appointment: appointments)
+        for (String appointment : appointments)
             System.out.println(appointment);
     }
 
@@ -121,7 +121,7 @@ public class Receptionist {
     // create a new appointment
     // assume that doctors work from 10 a.m. to 5 p.m. and each appointment will
     // last 30 min.
-    public void makeAppointment() throws SQLException, ParseException{
+    public void makeAppointment() throws SQLException, ParseException {
         System.out.println("Please Enter the Patient's Health Card Number:");
         String pnumber = in.nextLine();
         String sql3 = "select phone"
