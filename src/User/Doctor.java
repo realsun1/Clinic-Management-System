@@ -58,11 +58,31 @@ public class Doctor {
         report.updateDiagnosis(rid, newDiagnosis, manager);
     }
 
+    public void getRecords(Scanner in, DataManager manager) throws SQLException {
+        System.out.println("Please Enter the Patient's name");
+        String name = in.nextLine();
+        String sql = "select * from report where pname=\"" + name + "\";";
+        List<String> reports = new ArrayList<>();
+        try {
+            reports = manager.query(sql);
+        } catch (SQLException e) {
+            System.err.println("Error: (" + e.getMessage() + ").");
+        }
+        if (reports.size() == 0) {
+            System.out.println("No Patient Found.");
+        } else {
+            for (String report : reports)
+                System.out.println(report);
+        }
+    }
+
     public static void main(String[] args) throws ClassNotFoundException, SQLException {
         DataManager manager = new DataManager();
         Doctor doctor = new Doctor(156438485, "Jack");
+        Scanner in = new Scanner(System.in);
         // doctor.getAppointments(manager);
         // doctor.showAppointments();
+        doctor.getRecords(in, manager);
     }
 
 }

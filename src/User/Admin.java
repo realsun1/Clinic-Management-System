@@ -99,13 +99,19 @@ public class Admin {
     public void deleteUser(DataManager manager, Scanner in) throws SQLException {
         System.out.println("Please the Username:");
         String name = in.nextLine();
-        String sql = "delete from login_info where username=\"" + name + "\";";
-        try {
-            manager.execute(sql);
-        } catch (SQLException e) {
-            System.err.println("Error: (" + e.getMessage() + ").");
+        String search = "select username from login_info where username=\"" + name + "\";";
+        List<String> ret = manager.query(search);
+        if (ret.size() == 0) {
+            System.out.println("User Not Found.");
+        } else {
+            String sql = "delete from login_info where username=\"" + name + "\";";
+            try {
+                manager.execute(sql);
+            } catch (SQLException e) {
+                System.err.println("Error: (" + e.getMessage() + ").");
+            }
+            System.out.println("Delete Successfully.");
         }
-        System.out.println("Delete Successfully.");
     }
 
     // public static void main(String[] args) throws ClassNotFoundException,
@@ -120,5 +126,6 @@ public class Admin {
     // admin.getReceptionists(manager);
     // admin.printReceptionists();
     // admin.addUser(manager, in);
+    // admin.deleteUser(manager, in);
     // }
 }
