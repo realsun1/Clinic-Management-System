@@ -138,7 +138,7 @@ public class UserMenu {
             System.out.println("|                 6. Exit                                 |");
             System.out.println("+---------------------------------------------------------+");
 
-            input = getValidInput();
+            input = getValidInput(6);
 
             switch (input) {
                 case "1":
