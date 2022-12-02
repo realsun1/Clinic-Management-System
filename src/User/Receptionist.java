@@ -38,20 +38,13 @@ public class Receptionist {
         info.add(symptoms);
         try {
             info = Validator.patientValidator(info, in, manager);
-        } catch (SQLException e) {
-            System.err.println("Error: (" + e.getMessage() + ").");
-            return;
-        }
-        String sql = "insert into patient(pnumber, pname, phone, symptoms)"
-                + " values(" + Integer.parseInt(info.get(0)) + ",\"" + name + "\",\"" + info.get(1) + "\",\""
-                + info.get(2)
-                + "\");";
-        System.out.println("SQL QUERY:");
-        System.out.println(sql);
-        try {
+            String sql = "insert into patient(pnumber, pname, phone, symptoms)"
+                    + " values(" + Integer.parseInt(info.get(0)) + ",\"" + name + "\",\"" + info.get(1) + "\",\""
+                    + info.get(2)
+                    + "\");";
             manager.execute(sql);
         } catch (SQLException e) {
-            System.err.println("Error: (" + e.getMessage() + ").");
+            e.printStackTrace();
             return;
         }
         System.out.println("Add Successful.");
@@ -88,6 +81,11 @@ public class Receptionist {
     // print all patients' information
     public void printPatients() {
         getPatients();
+
+        if (patients.size() == 0) {
+            System.out.println("There are no patients in the system.");
+        }
+
         System.out.printf("%-25s", "Healthy Card Number");
         System.out.printf("%-20s", "Name");
         System.out.printf("%-20s", "Contact");
@@ -144,19 +142,17 @@ public class Receptionist {
     // create a new appointment
     // assume that doctors work from 10 a.m. to 5 p.m. and each appointment will
     // last 30 min.
-    public void makeAppointment() throws SQLException, ParseException {
+    public void makeAppointment() {
         System.out.println("Please Enter the Patient's Health Card Number:");
         String pnumber = in.nextLine();
-        String sql3 = "select phone"
-                + " from patient"
-                + " where pname=\"" + pnumber + "\";";
-        String phone = "";
+        String search = "select pnumber from patient where pnumber = " + pnumber + ";";
+        boolean match = false;
         try {
-            phone = manager.query(sql3).get(0);
+            match = (manager.query(search).size() > 0);
         } catch (SQLException e) {
             System.err.println("Error: (" + e.getMessage() + ").");
         }
-        if (phone == "") {
+        if (!match) {
             System.out.println("Patient's Information doesn't exit. Please Create Patient Record First.");
             return;
         }
@@ -166,62 +162,85 @@ public class Receptionist {
         try {
             list1 = manager.query(sql1);
         } catch (SQLException e) {
-            System.err.println("Error: (" + e.getMessage() + ").");
+            e.printStackTrace();
+        }
+        if (list1.size() == 0) {
+            System.out.println("Your clinic must have a doctor to create appointments.");
+            return;
         }
         List<String[]> d_info = new ArrayList<>();
         for (String info : list1) {
             d_info.add(info.split(", "));
         }
         for (int i = 0; i < d_info.size(); ++i) {
-            System.out.println((i + 1) + "." + d_info.get(i)[1]);
+            System.out.println((i + 1) + ". " + d_info.get(i)[1]);
         }
         System.out.println("Please Choose the Doctor by No: ");
         int selected = Integer.parseInt(in.nextLine()) - 1;
         String sql2 = "select date"
                 + " from appointment"
-                + " where dname=\"" + d_info.get(selected)[1] + "\";";
+                + " where dnumber=" + selected + ";";
         List<String> list2 = new ArrayList<>();
-        list2 = manager.query(sql2);
-        System.out.println("The Following Times Have Been Booked: ");
-        for (String date : list2) {
-            System.out.println(date);
+        try {
+            list2 = manager.query(sql2);
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
+
+        if (list2.size() != 0) {
+            System.out.println("The Following Times Have Been Booked: ");
+            for (String date : list2) {
+                System.out.println(date);
+            }
+        }
+
         System.out.println("Please Choose the Date(YYYY/MM/DD HH:mm):");
         String date = in.nextLine();
-        while (!timeCheck(list2, date)) {
-            System.out.println("Conflict Exist! Please Enter another time:");
+        while (timeCheck(list2, date) != 0) {
+            if (timeCheck(list2, date) == 1) {
+                System.out.println("The date was entered incorrectly. Please follow the format (YYYY/MM/DD HH:mm):");
+            } else {
+                System.out.println("The doctor has another appointment at that time.");
+            }
             date = in.nextLine();
         }
-        String sql4 = "insert into appointment(dname, dno, pname, phone, date, cost, location)"
-                + "values(\"" + d_info.get(selected)[1] + "\"," + d_info.get(selected)[0] + ",\"" + pnumber + "\",\""
-                + phone
-                + "\",\"" + date + "\"," + "5" + ",\"" + d_info.get(selected)[2] + "\");";
+        String sql4 = "insert into appointment(dnumber, pnumber, date)"
+                + "values(" + d_info.get(selected)[0] + "," + pnumber + ",\"" + date + "\");";
         try {
             manager.execute(sql4);
         } catch (SQLException e) {
-            System.err.println("Error: (" + e.getMessage() + ").");
+            e.printStackTrace();
         }
-        System.out.println("Add Successfully");
+        System.out.println("Add Successful");
     }
 
     // Check if the patient's perferring time is available
-    private boolean timeCheck(List<String> timeList, String selectedTime) throws ParseException {
+    private int timeCheck(List<String> timeList, String selectedTime) {
         SimpleDateFormat sdf = new SimpleDateFormat("YYYY/MM/DD HH:mm");
-        Long select = sdf.parse(selectedTime).getTime();
-        for (String time : timeList) {
-            Long busy = sdf.parse(time).getTime();
-            Long gap = Math.abs(select - busy) / 60000;
-            if (gap < 30)
-                return false;
+        long select, busy;
+        try {
+            select = sdf.parse(selectedTime).getTime();
+        } catch (ParseException e) {
+            return 1;
         }
-        return true;
+        for (String time : timeList) {
+            try {
+                busy = sdf.parse(time).getTime();
+            } catch (ParseException e) {
+                return 1;
+            }
+            long gap = Math.abs(select - busy) / 60000;
+            if (gap < 30)
+                return 2;
+        }
+        return 0;
     }
 
     public void deleteAppointment() {
         System.out.println("Please Enter the Patient's Name and Doctor's Name(Split by ,):");
         String[] info = in.nextLine().split(",");
         String sql = "delete from appointment"
-                + " where dname=\"" + info[1] + "\" and pname=\"" + info[0] + "\";";
+                + " where dnumber=" + info[1] + " and pnumber=" + info[0] + ";";
         try {
             manager.execute(sql);
         } catch (SQLException e) {

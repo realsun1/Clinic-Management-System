@@ -105,7 +105,7 @@ public class UserMenu {
                             receptionist.printAppointments();
                             break;
                         case "2":
-                            System.out.println("MAKE APPOINTMENT");
+                            receptionist.makeAppointment();
                             break;
                         case "3":
                             receptionist.deleteAppointment();
