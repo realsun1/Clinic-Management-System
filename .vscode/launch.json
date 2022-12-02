@@ -1,0 +1,35 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Launch Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        },
+        {
+            "type": "java",
+            "name": "Launch UserMenu",
+            "request": "launch",
+            "mainClass": "Menu.UserMenu",
+            "projectName": "Project_7801cd0"
+        },
+        {
+            "type": "java",
+            "name": "Launch Report",
+            "request": "launch",
+            "mainClass": "Report.Report",
+            "projectName": "Project_7801cd0"
+        },
+        {
+            "type": "java",
+            "name": "Launch DataManager",
+            "request": "launch",
+            "mainClass": "UserDatabase.DataManager",
+            "projectName": "Project_7801cd0"
+        }
+    ]
+}

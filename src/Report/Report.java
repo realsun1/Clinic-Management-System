@@ -51,7 +51,6 @@ public class Report {
         info.add(String.valueOf(patientId));
         info.add(diagnosis);
         info = Validator.reportValidator(info, in, manager);
-        in.close();
         patientId = Integer.parseInt(info.get(0));
         diagnosis = info.get(1);
         String sql = "insert into report(rid, dnumber, pnumber, diagnosis, medicine)"
