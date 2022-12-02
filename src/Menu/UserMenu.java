@@ -215,7 +215,7 @@ public class UserMenu {
                     System.out.println("|                 1. View Receptionists                   |");
                     System.out.println("|                 2. Add Receptionist                     |");
                     System.out.println("|                 3. Remove Receptionist                  |");
-                    System.out.println("|                 4. Return to Start                      |");
+                    System.out.println("|                 4. Back                                 |");
                     System.out.println("|                 5. Exit                                 |");
                     System.out.println("+---------------------------------------------------------+");
 
