@@ -83,6 +83,7 @@ public class Validator {
             throws SQLException {
         // check patient id
         Pattern pattern = Pattern.compile("[0-9]+");
+        Pattern patternWithSpaces = Pattern.compile("[0-9 ]+");
         while (!pattern.matcher(info.get(0)).matches()) {
             System.out.println("Health Card Number must be Digits only. Please Re-enter:");
             info.set(0, in.nextLine());
@@ -100,8 +101,8 @@ public class Validator {
             ret = manager.query(sql);
         }
         // check contact
-        while (!pattern.matcher(info.get(1)).matches()) {
-            System.out.println("Phone Number must be Digits only. Please Re-enter:");
+        while (!patternWithSpaces.matcher(info.get(1)).matches()) {
+            System.out.println("Phone Number cannot contain non-numeric characters. Please Re-enter:");
             info.set(1, in.nextLine());
         }
         // check symptoms
