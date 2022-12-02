@@ -84,16 +84,16 @@ public class Validator {
         // check patient id
         Pattern pattern = Pattern.compile("[0-9]+");
         while (!pattern.matcher(info.get(0)).matches()) {
-            System.out.println("Healthy Crad Number must be Digits only. Please Re-enter:");
+            System.out.println("Health Card Number must be Digits only. Please Re-enter:");
             info.set(0, in.nextLine());
         }
         String sql = "select pnumber from patient where pnumber=" + Integer.parseInt(info.get(0)) + ";";
         List<String> ret = manager.query(sql);
         while (ret.size() != 0) {
-            System.out.println("Patient Healthy Card Number Already Exists, Please Re-enter: ");
+            System.out.println("Patient Health Card Number Already Exists, Please Re-enter: ");
             info.set(0, in.nextLine());
             while (!pattern.matcher(info.get(0)).matches()) {
-                System.out.println("Healthy Crad Number must be Digits only. Please Re-enter:");
+                System.out.println("Health Card Number must be Digits only. Please Re-enter:");
                 info.set(0, in.nextLine());
             }
             sql = "select pnumber from patient where pnumber=" + Integer.parseInt(info.get(0)) + ";";

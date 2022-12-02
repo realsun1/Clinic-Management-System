@@ -86,7 +86,7 @@ public class Receptionist {
             System.out.println("There are no patients in the system.");
         }
 
-        System.out.printf("%-25s", "Healthy Card Number");
+        System.out.printf("%-25s", "Health Card Number");
         System.out.printf("%-20s", "Name");
         System.out.printf("%-20s", "Contact");
         System.out.printf("%-20s", "Symptoms");
