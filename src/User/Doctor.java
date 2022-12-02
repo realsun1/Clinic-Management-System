@@ -33,7 +33,7 @@ public class Doctor {
 
     // get all the appointments belong to the doctor
     public void getAppointments() {
-        String sql = "select D.dname, P.pname, P.phone, A.date, D.location from doctor D, patient P, appointment A where P.pnumber = A.pnumber and D.dnumber = "
+        String sql = "select D.dname, P.pname, P.phone, A.date, D.location from doctor D, patient P, appointment A where P.pnumber = A.pnumber and D.dnumber = A.dnumber and D.dnumber = "
                 + id + ";";
         try {
             appointments = manager.query(sql);
@@ -123,7 +123,7 @@ public class Doctor {
             System.err.println("Error: (" + e.getMessage() + ").");
         }
         if (reports.size() == 0) {
-            System.out.println("No reports were found for the patient.");
+            System.out.println("No records were found for the patient.");
         } else {
             for (String report : reports)
                 System.out.println(report);
@@ -131,8 +131,9 @@ public class Doctor {
     }
 
     private List<String> GetAttributesFromUsername(String username) {
-        String sql = "select dnumber, dname, location from user inner join doctor on user.doctor_number=doctor.dnumber";
-        List<String> returnList = new ArrayList<String>();
+        String sql = "select dnumber, dname, location from user inner join doctor on user.doctor_number=doctor.dnumber" +
+                " where username = \"" + username + "\"";
+        List<String> returnList = new ArrayList<>();
         try {
             ResultSet rs = manager.executeQuery(sql);
             rs.next();
