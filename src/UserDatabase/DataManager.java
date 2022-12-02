@@ -8,9 +8,9 @@ public class DataManager {
     static private Connection con;
     static private Statement stat;
     static private String driver = "com.mysql.cj.jdbc.Driver";
-    static private String url = "jdbc:mysql://localhost:3306/clinicsystem?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC";
+    static private String url = "jdbc:mysql://localhost:3306/clinic_system?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC";
     static private String user = "root";
-    static private String pwd = "";
+    static private String pwd = "123456";
 
     // creator for manager, connect to the database
     public DataManager() throws ClassNotFoundException, SQLException {
@@ -33,7 +33,11 @@ public class DataManager {
         while (rs.next()) {
             StringBuilder entry = new StringBuilder();
             for (int i = 1; i <= col; i++) {
-                entry.append(rs.getObject(i).toString().trim());
+                if (rs.getObject(i) == null) {
+                    entry.append("NULL");
+                } else {
+                    entry.append(rs.getObject(i).toString().trim());
+                }
                 entry.append(", ");
             }
             entry.deleteCharAt(entry.length() - 1);
@@ -41,6 +45,10 @@ public class DataManager {
             ret.add(entry.toString());
         }
         return ret;
+    }
+
+    public ResultSet executeQuery(String sql) throws SQLException {
+        return stat.executeQuery(sql);
     }
 
     // execute other operations
