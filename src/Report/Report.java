@@ -1,9 +1,12 @@
 package Report;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 import UserDatabase.DataManager;
+import Validator.Validator;
 
 public class Report {
     private int rid;
@@ -43,6 +46,14 @@ public class Report {
         String medicineList = "";
         for (String med : medicine)
             medicineList = medicineList + med + " ";
+        Scanner in = new Scanner(System.in);
+        List<String> info = new ArrayList<>();
+        info.add(String.valueOf(patientId));
+        info.add(diagnosis);
+        info = Validator.reportValidator(info, in, manager);
+        in.close();
+        patientId = Integer.parseInt(info.get(0));
+        diagnosis = info.get(1);
         String sql = "insert into report(rid, dnumber, pnumber, diagnosis, medicine)"
                 + " values(" + rid + ",\"" + doctorId + "\",\"" + patientId + "\",\"" + diagnosis + "\",\""
                 + medicineList + "\");";
@@ -81,5 +92,13 @@ public class Report {
             System.out.print(med + " ");
         }
         System.out.println();
+    }
+
+    public static void main(String[] args) throws SQLException,
+            ClassNotFoundException {
+        List<String> medicine = new ArrayList<>();
+        medicine.add("asdf");
+        DataManager manager = new DataManager();
+        Report report = new Report(123456789, 456789, "", medicine, 59845, manager);
     }
 }

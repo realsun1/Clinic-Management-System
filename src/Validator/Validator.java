@@ -55,4 +55,26 @@ public class Validator {
     public static boolean validateUserType(String givenType) {
         return (givenType.equals("doctor") || givenType.equals("admin") || givenType.equals("receptionist"));
     }
+
+    // check all information before create a new report
+    public static List<String> reportValidator(List<String> info, Scanner in, DataManager manager) throws SQLException {
+        // check patient id
+        int id = Integer.parseInt(info.get(0));
+        String sql = "select pnumber from patient where pnumber=" + id + ";";
+        List<String> result = manager.query(sql);
+        while (result.size() == 0) {
+            System.out
+                    .println("Patient Not Found. Please Re-Enter the Patient's Health Card Number:");
+            id = Integer.parseInt(in.nextLine());
+            sql = "select pnumber from patient where pnumber=" + id + ";";
+            result = manager.query(sql);
+        }
+        info.set(0, String.valueOf(id));
+        // check diagnosis
+        while (info.get(1).equals("")) {
+            System.out.println("Diagnosis Can't be Empty, Please Re-enter:");
+            info.set(1, in.nextLine());
+        }
+        return info;
+    }
 }
