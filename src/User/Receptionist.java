@@ -23,7 +23,7 @@ public class Receptionist {
     }
 
     // add a new patient to patient table
-    public void addPatient() throws SQLException {
+    public void addPatient() {
         System.out.println("Please Enter the Patient's Health Card Number:");
         String id = in.nextLine();
         System.out.println("Please Enter the Patient's Name:");
@@ -36,15 +36,16 @@ public class Receptionist {
         info.add(id);
         info.add(contact);
         info.add(symptoms);
-        info = Validator.patientValidator(info, in, manager);
-        String sql = "insert into patient(pnumber, pname, phone, symptoms)"
-                + " values(" + Integer.parseInt(info.get(0)) + ",\"" + name + "\",\"" + info.get(1) + "\",\""
-                + info.get(2)
-                + "\");";
+
         try {
+            info = Validator.patientValidator(info, in, manager);
+            String sql = "insert into patient(pnumber, pname, phone, symptoms)"
+                    + " values(" + Integer.parseInt(info.get(0)) + ",\"" + name + "\",\"" + info.get(1) + "\",\""
+                    + info.get(2)
+                    + "\");";
             manager.execute(sql);
         } catch (SQLException e) {
-            System.err.println("Error: (" + e.getMessage() + ").");
+            e.printStackTrace();
             return;
         }
         System.out.println("Add Successful.");
@@ -81,6 +82,10 @@ public class Receptionist {
     // print all patients' information
     public void printPatients() {
         getPatients();
+
+        if (patients.size() == 0) {
+            System.out.println("There are no patients in the system.");
+        }
 
         for (String patient : patients)
             System.out.println(patient);
