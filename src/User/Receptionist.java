@@ -113,6 +113,10 @@ public class Receptionist {
 
     public void printAppointments() {
         getAppointments();
+        if (appointments.size() == 0) {
+            System.out.println("No Appointments Found.");
+            return;
+        }
         System.out.printf("%-20s", "Doctor Name");
         System.out.printf("%-20s", "Patient Name");
         System.out.printf("%-20s", "Patient Contact");

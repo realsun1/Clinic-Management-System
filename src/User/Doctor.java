@@ -33,7 +33,8 @@ public class Doctor {
 
     // get all the appointments belong to the doctor
     public void getAppointments() {
-        String sql = "select * from appointment where dname =\"" + name + "\";";
+        String sql = "select D.dname, P.pname, P.phone, A.date, D.location from doctor D, patient P, appointment A where P.pnumber = A.pnumber and D.dnumber = "
+                + id + ";";
         try {
             appointments = manager.query(sql);
         } catch (SQLException e) {
@@ -44,9 +45,25 @@ public class Doctor {
     // print the appointments
     public void showAppointments() {
         getAppointments();
-
-        for (String appointment : appointments)
-            System.out.println(appointment);
+        if (appointments.size() == 0) {
+            System.out.println("No Appointments Found.");
+            return;
+        }
+        System.out.printf("%-20s", "Doctor Name");
+        System.out.printf("%-20s", "Patient Name");
+        System.out.printf("%-20s", "Patient Contact");
+        System.out.printf("%-25s", "Date");
+        System.out.printf("%-20s", "Location");
+        System.out.println();
+        for (String appointment : appointments) {
+            String[] info = appointment.split(", ");
+            System.out.printf("%-20s", info[0]);
+            System.out.printf("%-20s", info[1]);
+            System.out.printf("%-20s", info[2]);
+            System.out.printf("%-25s", info[3]);
+            System.out.printf("%-20s", info[4]);
+            System.out.println();
+        }
     }
 
     // create a new report for patient
@@ -127,5 +144,10 @@ public class Doctor {
         }
 
         return returnList;
+    }
+
+    public static void main(String[] args) throws ClassNotFoundException, SQLException {
+        Doctor doctor = new Doctor("asd", new Scanner(System.in), new DataManager());
+        doctor.showAppointments();
     }
 }
