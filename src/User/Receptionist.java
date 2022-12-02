@@ -84,19 +84,20 @@ public class Receptionist {
 
         if (patients.size() == 0) {
             System.out.println("There are no patients in the system.");
+            return;
         }
 
-        System.out.printf("%-25s", "Healthy Card Number");
+        System.out.printf("%-25s", "Health Card Number");
         System.out.printf("%-20s", "Name");
-        System.out.printf("%-20s", "Contact");
+        System.out.printf("%-20s", "Phone Number");
         System.out.printf("%-20s", "Symptoms");
         System.out.println();
         for (String patient : patients) {
             String[] info = patient.split(", ");
             System.out.printf("%-25s", info[0]);
-            System.out.printf("%-20s", info[0]);
-            System.out.printf("%-20s", info[0]);
-            System.out.printf("%-20s", info[0]);
+            System.out.printf("%-20s", info[1]);
+            System.out.printf("%-20s", info[2]);
+            System.out.printf("%-20s", info[3]);
             System.out.println();
         }
     }

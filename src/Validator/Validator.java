@@ -83,25 +83,26 @@ public class Validator {
             throws SQLException {
         // check patient id
         Pattern pattern = Pattern.compile("[0-9]+");
+        Pattern patternWithSpaces = Pattern.compile("[0-9 ]+");
         while (!pattern.matcher(info.get(0)).matches()) {
-            System.out.println("Healthy Crad Number must be Digits only. Please Re-enter:");
+            System.out.println("Health Card Number must be Digits only. Please Re-enter:");
             info.set(0, in.nextLine());
         }
         String sql = "select pnumber from patient where pnumber=" + Integer.parseInt(info.get(0)) + ";";
         List<String> ret = manager.query(sql);
         while (ret.size() != 0) {
-            System.out.println("Patient Healthy Card Number Already Exists, Please Re-enter: ");
+            System.out.println("Patient Health Card Number Already Exists, Please Re-enter: ");
             info.set(0, in.nextLine());
             while (!pattern.matcher(info.get(0)).matches()) {
-                System.out.println("Healthy Crad Number must be Digits only. Please Re-enter:");
+                System.out.println("Health Card Number must be Digits only. Please Re-enter:");
                 info.set(0, in.nextLine());
             }
             sql = "select pnumber from patient where pnumber=" + Integer.parseInt(info.get(0)) + ";";
             ret = manager.query(sql);
         }
         // check contact
-        while (!pattern.matcher(info.get(1)).matches()) {
-            System.out.println("Phone Number must be Digits only. Please Re-enter:");
+        while (!patternWithSpaces.matcher(info.get(1)).matches()) {
+            System.out.println("Phone Number cannot contain non-numeric characters. Please Re-enter:");
             info.set(1, in.nextLine());
         }
         // check symptoms

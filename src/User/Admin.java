@@ -35,6 +35,12 @@ public class Admin {
     // print all doctors' information
     public void printDoctors() {
         getDoctors();
+
+        if (doctors.size() == 0) {
+            System.out.println("There are no doctors to display.");
+            return;
+        }
+        
         System.out.printf("%-15s", "ID");
         System.out.printf("%-20s", "Name");
         System.out.printf("%-10s", "Location");
