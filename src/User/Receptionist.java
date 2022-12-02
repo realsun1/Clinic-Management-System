@@ -2,7 +2,6 @@ package User;
 
 import UserDatabase.DataManager;
 import Validator.Validator;
-import javafx.scene.chart.PieChart.Data;
 
 import java.sql.SQLException;
 import java.text.ParseException;
@@ -42,8 +41,6 @@ public class Receptionist {
                 + " values(" + Integer.parseInt(info.get(0)) + ",\"" + name + "\",\"" + info.get(1) + "\",\""
                 + info.get(2)
                 + "\");";
-        System.out.println("SQL QUERY:");
-        System.out.println(sql);
         try {
             manager.execute(sql);
         } catch (SQLException e) {
