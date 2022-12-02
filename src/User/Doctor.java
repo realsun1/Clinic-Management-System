@@ -81,19 +81,19 @@ public class Doctor {
         }
 
         // Backup in case query fails
-        return (int)(Instant.now().getEpochSecond()%86400);
+        return (int) (Instant.now().getEpochSecond() % 86400);
     }
 
     // update patient's dignosis
-//    public void updateDiagnosis() throws SQLException {
-//        System.out.println("Please Enter the Patient's Name:");
-//        String pname = in.nextLine();
-//        int rid = id + pname.length() + pname.charAt(0) - 'A';
-//        System.out.println("Please Enter the Diagnosis:");
-//        String newDiagnosis = in.nextLine();
-//        Report report = new Report();
-//        report.updateDiagnosis(rid, newDiagnosis, manager);
-//    }
+    // public void updateDiagnosis() throws SQLException {
+    // System.out.println("Please Enter the Patient's Name:");
+    // String pname = in.nextLine();
+    // int rid = id + pname.length() + pname.charAt(0) - 'A';
+    // System.out.println("Please Enter the Diagnosis:");
+    // String newDiagnosis = in.nextLine();
+    // Report report = new Report();
+    // report.updateDiagnosis(rid, newDiagnosis, manager);
+    // }
 
     public void printReports() {
         System.out.println("Please Enter the Patient's Health Card Number:");

@@ -36,7 +36,6 @@ public class Receptionist {
         info.add(id);
         info.add(contact);
         info.add(symptoms);
-
         try {
             info = Validator.patientValidator(info, in, manager);
             String sql = "insert into patient(pnumber, pname, phone, symptoms)"
@@ -87,8 +86,19 @@ public class Receptionist {
             System.out.println("There are no patients in the system.");
         }
 
-        for (String patient : patients)
-            System.out.println(patient);
+        System.out.printf("%-25s", "Healthy Card Number");
+        System.out.printf("%-20s", "Name");
+        System.out.printf("%-20s", "Contact");
+        System.out.printf("%-20s", "Symptoms");
+        System.out.println();
+        for (String patient : patients) {
+            String[] info = patient.split(", ");
+            System.out.printf("%-25s", info[0]);
+            System.out.printf("%-20s", info[0]);
+            System.out.printf("%-20s", info[0]);
+            System.out.printf("%-20s", info[0]);
+            System.out.println();
+        }
     }
 
     public void getAppointments() {
@@ -245,5 +255,6 @@ public class Receptionist {
     // DataManager manager = new DataManager();
     // Receptionist receptionist = new Receptionist(in, manager);
     // receptionist.addPatient();
+    // receptionist.printPatients();
     // }
 }

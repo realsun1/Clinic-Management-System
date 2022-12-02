@@ -35,9 +35,17 @@ public class Admin {
     // print all doctors' information
     public void printDoctors() {
         getDoctors();
-
-        for (String doctor : doctors)
-            System.out.println(doctor);
+        System.out.printf("%-15s", "ID");
+        System.out.printf("%-20s", "Name");
+        System.out.printf("%-10s", "Location");
+        System.out.println();
+        for (String doctor : doctors) {
+            String[] info = doctor.split(", ");
+            System.out.printf("%-15s", String.valueOf(info[0]));
+            System.out.printf("%-20s", info[1]);
+            System.out.printf("%-10s", info[2]);
+            System.out.println();
+        }
     }
 
     // get all receptionists' information from database
@@ -54,7 +62,7 @@ public class Admin {
     // print all receptionists' information
     public void printReceptionists() {
         getReceptionists();
-
+        System.out.println("UserName");
         for (String receptionist : receptionists)
             System.out.println(receptionist);
     }
@@ -77,4 +85,11 @@ public class Admin {
             System.err.println("Error: (" + e.getMessage() + ").");
         }
     }
+
+    // public static void main(String[] args) throws ClassNotFoundException,
+    // SQLException {
+    // Admin admin = new Admin(new Scanner(System.in), new DataManager());
+    // admin.printDoctors();
+    // admin.printReceptionists();
+    // }
 }
