@@ -42,8 +42,7 @@ DROP TABLE IF EXISTS `appointment`;
 CREATE TABLE `appointment`  (
     `dnumber` int NOT NULL,
     `pnumber` int NOT NULL,
-    `date` TIMESTAMP NOT NULL,
-    `cost` float NOT NULL,
+    `date` DATETIME NOT NULL,
     PRIMARY KEY (`dnumber`, `pnumber`),
     FOREIGN KEY (`dnumber`) REFERENCES `doctor` (`dnumber`) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (`pnumber`) REFERENCES `patient` (`pnumber`) ON DELETE CASCADE ON UPDATE CASCADE
