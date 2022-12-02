@@ -134,7 +134,7 @@ public class UserMenu {
             System.out.println("|                 2. View Patients                        |");
             System.out.println("|                 3. Find Patient Record                  |");
             System.out.println("|                 4. Create Patient Record                |");
-            System.out.println("|                 5. Return to Start                      |");
+            System.out.println("|                 5. Logout                               |");
             System.out.println("|                 6. Exit                                 |");
             System.out.println("+---------------------------------------------------------+");
 
