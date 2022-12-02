@@ -63,12 +63,18 @@ public class Admin {
     public void deleteUser() {
         System.out.println("Please Enter the Username:");
         String name = in.nextLine();
+        String search = "select username from user where username=\"" + name + "\";";
         String sql = "delete from user where username=\"" + name + "\";";
         try {
-            manager.execute(sql);
+            List<String> ret = manager.query(search);
+            if (ret.size() == 0) {
+                System.out.println("User not found.");
+            } else {
+                manager.execute(sql);
+                System.out.println("Delete Successful.");
+            }
         } catch (SQLException e) {
             System.err.println("Error: (" + e.getMessage() + ").");
         }
-        System.out.println("Delete Successful.");
     }
 }
