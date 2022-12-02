@@ -83,9 +83,19 @@ public class Receptionist {
     // print all patients' information
     public void printPatients() {
         getPatients();
-
-        for (String patient : patients)
-            System.out.println(patient);
+        System.out.printf("%-25s", "Healthy Card Number");
+        System.out.printf("%-20s", "Name");
+        System.out.printf("%-20s", "Contact");
+        System.out.printf("%-20s", "Symptoms");
+        System.out.println();
+        for (String patient : patients) {
+            String[] info = patient.split(", ");
+            System.out.printf("%-25s", info[0]);
+            System.out.printf("%-20s", info[0]);
+            System.out.printf("%-20s", info[0]);
+            System.out.printf("%-20s", info[0]);
+            System.out.println();
+        }
     }
 
     public void getAppointments() {
@@ -216,10 +226,11 @@ public class Receptionist {
     }
 
     // public static void main(String[] args) throws ClassNotFoundException,
-    // SQLException {
-    // Scanner in = new Scanner(System.in);
-    // DataManager manager = new DataManager();
-    // Receptionist receptionist = new Receptionist(in, manager);
-    // receptionist.addPatient();
+    //         SQLException {
+    //     Scanner in = new Scanner(System.in);
+    //     DataManager manager = new DataManager();
+    //     Receptionist receptionist = new Receptionist(in, manager);
+    //     receptionist.addPatient();
+    //     receptionist.printPatients();
     // }
 }
