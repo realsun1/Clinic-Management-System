@@ -103,7 +103,7 @@ public class Receptionist {
 
     public void getAppointments() {
         appointments = new ArrayList<>();
-        String sql = "select * from appointment";
+        String sql = "select D.dname, P.pname, P.phone, A.date, D.location from doctor D, patient P, appointment A where P.pnumber = A.pnumber and D.dnumber = A.dnumber";
         try {
             appointments = manager.query(sql);
         } catch (SQLException e) {
@@ -113,9 +113,21 @@ public class Receptionist {
 
     public void printAppointments() {
         getAppointments();
-
-        for (String appointment : appointments)
-            System.out.println(appointment);
+        System.out.printf("%-20s", "Doctor Name");
+        System.out.printf("%-20s", "Patient Name");
+        System.out.printf("%-20s", "Patient Contact");
+        System.out.printf("%-25s", "Date");
+        System.out.printf("%-20s", "Location");
+        System.out.println();
+        for (String appointment : appointments) {
+            String[] info = appointment.split(", ");
+            System.out.printf("%-20s", info[0]);
+            System.out.printf("%-20s", info[1]);
+            System.out.printf("%-20s", info[2]);
+            System.out.printf("%-25s", info[3]);
+            System.out.printf("%-20s", info[4]);
+            System.out.println();
+        }
     }
 
     // delete a patient's information by name.
@@ -239,22 +251,52 @@ public class Receptionist {
     public void deleteAppointment() {
         System.out.println("Please Enter the Patient's Name and Doctor's Name(Split by ,):");
         String[] info = in.nextLine().split(",");
-        String sql = "delete from appointment"
-                + " where dnumber=" + info[1] + " and pnumber=" + info[0] + ";";
+        String getdno = "select dnumber from doctor where dname=\"" + info[1] + "\";";
+        String getpno = "select pnumber from patient where pname=\"" + info[0] + "\";";
+        List<String> dno = new ArrayList<>();
+        List<String> pno = new ArrayList<>();
         try {
-            manager.execute(sql);
+            dno = manager.query(getdno);
+            pno = manager.query(getpno);
         } catch (SQLException e) {
             System.err.println("Error: (" + e.getMessage() + ").");
         }
-        System.out.println("Delete Successfully");
+        if (dno.size() == 0) {
+            System.out.println("Doctor Not Found.");
+            return;
+        }
+        if (pno.size() == 0) {
+            System.out.println("Patient Not Found.");
+            return;
+        }
+        String sql0 = "select dnumber from appointment where dnumber=" + Integer.valueOf(dno.get(0)) + " and pnumber="
+                + Integer.valueOf(pno.get(0)) + ";";
+        List<String> ret = new ArrayList<>();
+        try {
+            ret = manager.query(sql0);
+        } catch (SQLException e) {
+            System.err.println("Error: (" + e.getMessage() + ").");
+        }
+        if (ret.size() != 0) {
+            String sql = "delete from appointment"
+                    + " where dnumber=" + dno.get(0) + " and pnumber=" + pno.get(0) + ";";
+            try {
+                manager.execute(sql);
+            } catch (SQLException e) {
+                System.err.println("Error: (" + e.getMessage() + ").");
+            }
+            System.out.println("Delete Successfully");
+        } else {
+            System.out.println("Appointment Not Found.");
+        }
+
     }
 
-    // public static void main(String[] args) throws ClassNotFoundException,
-    // SQLException {
-    // Scanner in = new Scanner(System.in);
-    // DataManager manager = new DataManager();
-    // Receptionist receptionist = new Receptionist(in, manager);
-    // receptionist.addPatient();
-    // receptionist.printPatients();
-    // }
+    public static void main(String[] args) throws ClassNotFoundException,
+            SQLException {
+        Scanner in = new Scanner(System.in);
+        DataManager manager = new DataManager();
+        Receptionist receptionist = new Receptionist(in, manager);
+        receptionist.deleteAppointment();
+    }
 }
