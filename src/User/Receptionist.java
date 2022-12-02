@@ -10,35 +10,42 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Receptionist {
-    private int id;
-    private int name;
+    private List<String> patients;
+    private List<String> appointments;
 
-    public Receptionist(int id, int name) {
-        this.id = id;
-        this.name = name;
+    private Scanner in;
+    private DataManager manager;
+
+    public Receptionist(Scanner in, DataManager manager) {
+        this.in = in;
+        this.manager = manager;
     }
 
     // add a new patient to patient table
-    public void addPatient(Scanner in, DataManager manager) throws SQLException {
+    public void addPatient() {
+        System.out.println("Please Enter the Patient's Health Card Number:");
+        String id = in.nextLine();
         System.out.println("Please Enter the Patient's Name:");
         String name = in.nextLine();
-        System.out.println("Please Enter the Patient's Contact:");
+        System.out.println("Please Enter the Patient's Phone Number:");
         String contact = in.nextLine();
-        System.out.println("Please Enter the Patient's Symptom:");
-        String symptom = in.nextLine();
-        String sql = "insert into patient(pname, pcontact, symptom)"
-                + " values(\"" + name + "\",\"" + contact + "\",\"" + symptom + "\");";
+        System.out.println("Describe the Patient's Symptoms:");
+        String symptoms = in.nextLine();
+        String sql = "insert into patient(pnumber, pname, phone, symptoms)"
+                + " values(" + Integer.parseInt(id) + ",\"" + name + "\",\"" + contact + "\",\"" + symptoms + "\");";
+        System.out.println("SQL QUERY:");
+        System.out.println(sql);
         try {
             manager.execute(sql);
         } catch (SQLException e) {
             System.err.println("Error: (" + e.getMessage() + ").");
             return;
         }
-        System.out.println("Add Successfully");
+        System.out.println("Add Successful.");
     }
 
     // search a patient by name and return patient's information.
-    public String getPatient(Scanner in, DataManager manager) throws SQLException {
+    public String getPatient() {
         System.out.println("Please Enter the Patient You Want to Search:");
         String name = in.nextLine();
         String sql = "select *"
@@ -54,37 +61,79 @@ public class Receptionist {
         return list.get(0);
     }
 
-    // delete a patient's information by name.
-    public void deletePatient(Scanner in, DataManager manager) throws SQLException {
-        System.out.println("Please Enter the Name You Want to Delete");
-        String name = in.nextLine();
-        String sql = "delete from patient"
-                + " where pname=\"" + name + "\";";
+    // get all patients' information from database
+    public void getPatients() {
+        patients = new ArrayList<>();
+        String sql = "select * from patient";
         try {
-            manager.execute(sql);
+            patients = manager.query(sql);
         } catch (SQLException e) {
             System.err.println("Error: (" + e.getMessage() + ").");
-            return;
         }
-        System.out.println("Delete Successfully");
+    }
+
+    // print all patients' information
+    public void printPatients() {
+        getPatients();
+
+        for (String patient : patients)
+            System.out.println(patient);
+    }
+
+    public void getAppointments() {
+        appointments = new ArrayList<>();
+        String sql = "select * from appointment";
+        try {
+            appointments = manager.query(sql);
+        } catch (SQLException e) {
+            System.err.println("Error: (" + e.getMessage() + ").");
+        }
+    }
+
+    public void printAppointments() {
+        getAppointments();
+
+        for (String appointment: appointments)
+            System.out.println(appointment);
+    }
+
+    // delete a patient's information by name.
+    public void deletePatient() {
+        System.out.println("Please enter the patient's health card number:");
+        String number = in.nextLine();
+        String search = "select pnumber from patient where pnumber = " + number + ";";
+        String sql = "delete from patient"
+                + " where pnumber=\"" + Integer.parseInt(number) + "\";";
+        try {
+            List<String> ret = manager.query(search);
+            if (ret.size() == 0) {
+                System.out.println("Patient not found.");
+            } else {
+                manager.execute(sql);
+                System.out.println("Patient deleted.");
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Error: (" + e.getMessage() + ").");
+        }
     }
 
     // create a new appointment
     // assume that doctors work from 10 a.m. to 5 p.m. and each appointment will
     // last 30 min.
-    public void makeAppointment(Scanner in, DataManager manager) throws SQLException, ParseException {
-        System.out.println("Please Enter the Patient's Name: ");
-        String pname = in.nextLine();
-        String sql3 = "select pcontact"
+    public void makeAppointment() throws SQLException, ParseException{
+        System.out.println("Please Enter the Patient's Health Card Number:");
+        String pnumber = in.nextLine();
+        String sql3 = "select phone"
                 + " from patient"
-                + " where pname=\"" + pname + "\";";
-        String pcontact = "";
+                + " where pname=\"" + pnumber + "\";";
+        String phone = "";
         try {
-            pcontact = manager.query(sql3).get(0);
+            phone = manager.query(sql3).get(0);
         } catch (SQLException e) {
             System.err.println("Error: (" + e.getMessage() + ").");
         }
-        if (pcontact == "") {
+        if (phone == "") {
             System.out.println("Patient's Information doesn't exit. Please Create Patient Record First.");
             return;
         }
@@ -120,9 +169,9 @@ public class Receptionist {
             System.out.println("Conflict Exist! Please Enter another time:");
             date = in.nextLine();
         }
-        String sql4 = "insert into appointment(dname, dno, pname, pcontact, date, cost, location)"
-                + "values(\"" + d_info.get(selected)[1] + "\"," + d_info.get(selected)[0] + ",\"" + pname + "\",\""
-                + pcontact
+        String sql4 = "insert into appointment(dname, dno, pname, phone, date, cost, location)"
+                + "values(\"" + d_info.get(selected)[1] + "\"," + d_info.get(selected)[0] + ",\"" + pnumber + "\",\""
+                + phone
                 + "\",\"" + date + "\"," + "5" + ",\"" + d_info.get(selected)[2] + "\");";
         try {
             manager.execute(sql4);
@@ -145,7 +194,7 @@ public class Receptionist {
         return true;
     }
 
-    public void deleteAppointment(Scanner in, DataManager manager) throws SQLException {
+    public void deleteAppointment() {
         System.out.println("Please Enter the Patient's Name and Doctor's Name(Split by ,):");
         String[] info = in.nextLine().split(",");
         String sql = "delete from appointment"
@@ -157,17 +206,4 @@ public class Receptionist {
         }
         System.out.println("Delete Successfully");
     }
-
-    /*
-     * public static void main(String[] args) throws ClassNotFoundException,
-     * SQLException, ParseException {
-     * Receptionist receptionist = new Receptionist(0, 0);
-     * DataManager manager = new DataManager();
-     * Scanner in = new Scanner(System.in);
-     * // receptionist.makeAppointment(in, manager);
-     * // receptionist.deleteAppointment(in, manager);
-     * // receptionist.addPatient(in, manager);
-     * receptionist.deletePatient(in, manager);
-     * }
-     */
 }
