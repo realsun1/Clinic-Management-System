@@ -1,6 +1,8 @@
 package User;
 
 import UserDatabase.DataManager;
+import Validator.Validator;
+import javafx.scene.chart.PieChart.Data;
 
 import java.sql.SQLException;
 import java.text.ParseException;
@@ -22,7 +24,7 @@ public class Receptionist {
     }
 
     // add a new patient to patient table
-    public void addPatient() {
+    public void addPatient() throws SQLException {
         System.out.println("Please Enter the Patient's Health Card Number:");
         String id = in.nextLine();
         System.out.println("Please Enter the Patient's Name:");
@@ -31,8 +33,15 @@ public class Receptionist {
         String contact = in.nextLine();
         System.out.println("Describe the Patient's Symptoms:");
         String symptoms = in.nextLine();
+        List<String> info = new ArrayList<>();
+        info.add(id);
+        info.add(contact);
+        info.add(symptoms);
+        info = Validator.patientValidator(info, in, manager);
         String sql = "insert into patient(pnumber, pname, phone, symptoms)"
-                + " values(" + Integer.parseInt(id) + ",\"" + name + "\",\"" + contact + "\",\"" + symptoms + "\");";
+                + " values(" + Integer.parseInt(info.get(0)) + ",\"" + name + "\",\"" + info.get(1) + "\",\""
+                + info.get(2)
+                + "\");";
         System.out.println("SQL QUERY:");
         System.out.println(sql);
         try {
@@ -206,4 +215,12 @@ public class Receptionist {
         }
         System.out.println("Delete Successfully");
     }
+
+    // public static void main(String[] args) throws ClassNotFoundException,
+    // SQLException {
+    // Scanner in = new Scanner(System.in);
+    // DataManager manager = new DataManager();
+    // Receptionist receptionist = new Receptionist(in, manager);
+    // receptionist.addPatient();
+    // }
 }

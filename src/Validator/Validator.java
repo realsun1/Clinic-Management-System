@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 import UserDatabase.DataManager;
 
 public class Validator {
-    // check all information before create a new record.
+    // check all information before create a new user.
     public static List<String> userValidator(List<String> info, Scanner in, DataManager manager) throws SQLException {
         List<String> username = new ArrayList<>();
 
@@ -77,4 +77,39 @@ public class Validator {
         }
         return info;
     }
+
+    // check all information before create a new patient
+    public static List<String> patientValidator(List<String> info, Scanner in, DataManager manager)
+            throws SQLException {
+        // check patient id
+        Pattern pattern = Pattern.compile("[0-9]+");
+        while (!pattern.matcher(info.get(0)).matches()) {
+            System.out.println("Healthy Crad Number must be Digits only. Please Re-enter:");
+            info.set(0, in.nextLine());
+        }
+        String sql = "select pnumber from patient where pnumber=" + Integer.parseInt(info.get(0)) + ";";
+        List<String> ret = manager.query(sql);
+        while (ret.size() != 0) {
+            System.out.println("Patient Healthy Card Number Already Exists, Please Re-enter: ");
+            info.set(0, in.nextLine());
+            while (!pattern.matcher(info.get(0)).matches()) {
+                System.out.println("Healthy Crad Number must be Digits only. Please Re-enter:");
+                info.set(0, in.nextLine());
+            }
+            sql = "select pnumber from patient where pnumber=" + Integer.parseInt(info.get(0)) + ";";
+            ret = manager.query(sql);
+        }
+        // check contact
+        while (!pattern.matcher(info.get(1)).matches()) {
+            System.out.println("Phone Number must be Digits only. Please Re-enter:");
+            info.set(1, in.nextLine());
+        }
+        // check symptoms
+        while (info.get(2).equals("")) {
+            System.out.println("Symptoms Can't be Empty. Please Re-enter:");
+            info.set(2, in.nextLine());
+        }
+        return info;
+    }
+
 }
