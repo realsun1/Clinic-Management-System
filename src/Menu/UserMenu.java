@@ -130,31 +130,35 @@ public class UserMenu {
 
         do {
             System.out.println("+-----------------------Doctor Menu-----------------------+");
-            System.out.println("|                 1. View Patients                        |");
-            System.out.println("|                 2. Find Patient Record                  |");
-            System.out.println("|                 3. Create Patient Record                |");
-            System.out.println("|                 4. Return to Start                      |");
-            System.out.println("|                 5. Exit                                 |");
+            System.out.println("|                 1. View Appointments                    |");
+            System.out.println("|                 2. View Patients                        |");
+            System.out.println("|                 3. Find Patient Record                  |");
+            System.out.println("|                 4. Create Patient Record                |");
+            System.out.println("|                 5. Return to Start                      |");
+            System.out.println("|                 6. Exit                                 |");
             System.out.println("+---------------------------------------------------------+");
 
             input = getValidInput();
 
             switch (input) {
                 case "1":
-                    receptionist.printPatients();
+                    doctor.showAppointments();
                     break;
                 case "2":
-                    doctor.printReports();
+                    receptionist.printPatients();
                     break;
                 case "3":
+                    doctor.printReports();
+                    break;
+                case "4":
                     doctor.createReport();
                     break;
-                case "5":
+                case "6":
                     exit();
                     break;
             }
             System.out.println();
-        } while (!input.equals("4"));
+        } while (!input.equals("5"));
     }
 
     private static void adminMenu() {
