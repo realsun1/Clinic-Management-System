@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Launch Admin",
+            "request": "launch",
+            "mainClass": "User.Admin",
+            "projectName": "Clinic-Management-System_f5eef28d"
+        },
+        {
+            "type": "java",
             "name": "Launch Current File",
             "request": "launch",
             "mainClass": "${file}"
