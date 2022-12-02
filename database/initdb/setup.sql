@@ -50,4 +50,18 @@ CREATE TABLE `appointment`  (
 );
 
 
--- TODO: Report
+-- Report
+
+DROP TABLE IF EXISTS `report`;
+CREATE TABLE `report`  (
+    `rid` int NOT NULL,
+    `dnumber` int NOT NULL,
+    `pnumber` int NOT NULL,
+    `diagnosis` varchar(100) NOT NULL,
+    `medicine` varchar(100) NOT NULL,
+    PRIMARY KEY (`rid`),
+    INDEX `report_pnumber`(`pnumber` ASC),
+    INDEX `report_dnumber`(`dnumber` ASC),
+    FOREIGN KEY (`dnumber`) REFERENCES `doctor` (`dnumber`) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (`pnumber`) REFERENCES `patient` (`pnumber`) ON DELETE CASCADE ON UPDATE CASCADE
+);
