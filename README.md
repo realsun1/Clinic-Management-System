@@ -21,6 +21,8 @@ The main function is in ``...\Clinic-Management-System\src\Menu\UserMenu``
 
 Use your IDE to run the main script.
 
+If you get an error that says "There is a problem with your database setup or configuration.", you need to add the library (in ``\lib``) to the modules of your program (IDE setting).
+
 ### Help
 
 The database is empty by default.
