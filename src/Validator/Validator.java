@@ -9,15 +9,17 @@ import java.util.regex.Pattern;
 import UserDatabase.DataManager;
 
 public class Validator {
-    // check all information before create a new user.
+    // check all information before creating a new user
     public static List<String> userValidator(List<String> info, Scanner in, DataManager manager) throws SQLException {
         List<String> username = new ArrayList<>();
 
+        // validate user type
         while (!validateUserType(info.get(0))) {
             System.out.println("User Type Doesn't Exist. Please Retry:");
             info.set(4, in.nextLine());
         }
 
+        // validate username
         String sql1 = "select * from user where username=\"" + info.get(1) + "\";";
         username = manager.query(sql1);
         while (username.size() != 0) {
@@ -52,6 +54,7 @@ public class Validator {
         return info;
     }
 
+    // helper method to validate type (doctor, admin, or receptionist)
     public static boolean validateUserType(String givenType) {
         return (givenType.equals("doctor") || givenType.equals("admin") || givenType.equals("receptionist"));
     }
@@ -112,5 +115,4 @@ public class Validator {
         }
         return info;
     }
-
 }
