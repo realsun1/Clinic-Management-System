@@ -4,22 +4,31 @@ Welcome to the Clinic Management System. Here is a guideline to help you get sta
 
 > Requirements:
 - `JRE / JDK`
-- `IDE` 
+- `IDE (IntelliJ, Eclipse, etc.)` 
+- `Docker`
 
 ### Run the database from docker
 
-Windows: use cmd to cd the location of the **docker-compose.yml**(...\Clinic-Management-System\database), then run the following command:
+Use the terminal and ``cd`` into ``...\Clinic-Management-System\database`` (location of **docker-compose.yml**), then run the following command:
 
 ```dockerfile
 docker-compose up -d
 ```
 
-## How to Run
+### How to Run
 
-The workspace contains the folders:
+The main function is in ``...\Clinic-Management-System\src\Menu\UserMenu``
 
-- `Test`
-- `test.java`
+Use your IDE to run the main script.
 
-> Run test.java.
+### Help
 
+The database is empty by default.
+
+You will need to register a doctor, as a large part of the functionality relies on having at least one doctor in the system.
+
+You can register a receptionist, then login as the receptionist to add patients and book appointments.
+
+Once you have a doctor and a receptionist account, most of the functionality will be available to you (except for user management).
+
+Create an admin account to do user management functions.
