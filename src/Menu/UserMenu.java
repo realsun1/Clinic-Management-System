@@ -199,7 +199,7 @@ public class UserMenu {
                             login.addUser("doctor");
                             break;
                         case "3":
-                            admin.deleteUser();
+                            admin.deleteDoctorByID();
                             break;
                         case "5":
                             exit();
