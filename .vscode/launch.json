@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Launch Receptionist",
+            "request": "launch",
+            "mainClass": "User.Receptionist",
+            "projectName": "Clinic-Management-System_f5eef28d"
+        },
+        {
+            "type": "java",
             "name": "Launch Admin",
             "request": "launch",
             "mainClass": "User.Admin",

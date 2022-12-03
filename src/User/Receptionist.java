@@ -2,6 +2,7 @@ package User;
 
 import UserDatabase.DataManager;
 import Validator.Validator;
+import javafx.scene.chart.PieChart.Data;
 
 import java.sql.SQLException;
 import java.text.ParseException;
@@ -194,9 +195,21 @@ public class Receptionist {
         }
         System.out.println("Please Choose the Doctor by No: ");
         int selected = Integer.parseInt(in.nextLine()) - 1;
+        String check = "select * from appointment where pnumber=" + pnumber + " and dnumber=" + d_info.get(selected)[0]
+                + ";";
+        List<String> ret = new ArrayList<>();
+        try {
+            ret = manager.query(check);
+        } catch (SQLException e) {
+            System.err.println("Error: (" + e.getMessage() + ").");
+        }
+        if (ret.size() != 0) {
+            System.out.println("Appointment Has Been Made.");
+            return;
+        }
         String sql2 = "select date"
                 + " from appointment"
-                + " where dnumber=" + selected + ";";
+                + " where dnumber=" + d_info.get(selected)[0] + ";";
         List<String> list2 = new ArrayList<>();
         try {
             list2 = manager.query(sql2);
@@ -207,15 +220,16 @@ public class Receptionist {
         if (list2.size() != 0) {
             System.out.println("The Following Times Have Been Booked: ");
             for (String date : list2) {
-                System.out.println(date);
+                String[] temp = date.split("T");
+                System.out.println(temp[0] + " " + temp[1]);
             }
         }
 
-        System.out.println("Please Choose the Date(YYYY/MM/DD HH:mm):");
+        System.out.println("Please Choose the Date(YYYY-MM-DD HH:mm):");
         String date = in.nextLine();
         while (timeCheck(list2, date) != 0) {
             if (timeCheck(list2, date) == 1) {
-                System.out.println("The date was entered incorrectly. Please follow the format (YYYY/MM/DD HH:mm):");
+                System.out.println("The date was entered incorrectly. Please follow the format (YYYY-MM-DD HH:mm):");
             } else {
                 System.out.println("The doctor has another appointment at that time.");
             }
@@ -228,12 +242,12 @@ public class Receptionist {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        System.out.println("Add Successful");
+        System.out.println("Add Successful.");
     }
 
     // Check if the patient's perferring time is available
     private int timeCheck(List<String> timeList, String selectedTime) {
-        SimpleDateFormat sdf = new SimpleDateFormat("YYYY/MM/DD HH:mm");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm");
         long select, busy;
         try {
             select = sdf.parse(selectedTime).getTime();
@@ -241,6 +255,8 @@ public class Receptionist {
             return 1;
         }
         for (String time : timeList) {
+            String[] split = time.split("T");
+            time = split[0] + " " + split[1];
             try {
                 busy = sdf.parse(time).getTime();
             } catch (ParseException e) {
@@ -297,11 +313,11 @@ public class Receptionist {
 
     }
 
-    public static void main(String[] args) throws ClassNotFoundException,
-            SQLException {
-        Scanner in = new Scanner(System.in);
-        DataManager manager = new DataManager();
-        Receptionist receptionist = new Receptionist(in, manager);
-        receptionist.deleteAppointment();
-    }
+    // public static void main(String[] args) throws ClassNotFoundException,
+    // SQLException {
+    // Scanner in = new Scanner(System.in);
+    // DataManager manager = new DataManager();
+    // Receptionist receptionist = new Receptionist(in, manager);
+    // receptionist.makeAppointment();
+    // }
 }
